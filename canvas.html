@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas Clock</title>
+</head>
+
+<body>
+    <canvas id="clock" width="200" height="200"></canvas>
+    <script>
+        var canvas = document.getElementById("clock")
+        var ctx = canvas.getContext('2d')
+
+        ctx.translate(100, 100)
+
+        function clock() {
+            ctx.clearRect(-100, -100, 200, 200)
+
+            ctx.save()
+            ctx.strokeStyle = "lightgreen"
+            ctx.lineWidth = 5
+            ctx.beginPath()
+            ctx.arc(0, 0, 80, 0, Math.PI * 2)
+            ctx.closePath()
+            ctx.stroke()
+            ctx.restore()
+
+            ctx.save()
+            ctx.lineWidth = 3
+            ctx.strokeStyle = "lightblue"
+            ctx.beginPath()
+            for (var i = 0; i < 12; i++) {
+                var deg = Math.PI / 6 * i
+                var x = 70 * Math.sin(deg)
+                var y = 70 * Math.cos(deg)
+                ctx.moveTo(x, y)
+                ctx.lineTo(0.8 * x, 0.8 * y)
+            }
+            ctx.closePath()
+            ctx.stroke()
+            ctx.restore()
+
+            ctx.save()
+            ctx.lineWidth = 2
+            ctx.strokeStyle = "lightblue"
+            ctx.beginPath()
+            for (var i = 0; i < 60; i++) {
+                var deg = Math.PI / 30 * i
+                var x = 70 * Math.sin(deg)
+                var y = 70 * Math.cos(deg)
+                ctx.moveTo(x, y)
+                ctx.lineTo(0.9 * x, 0.9 * y)
+            }
+            ctx.closePath()
+            ctx.stroke()
+            ctx.restore()
+
+            var myDate = new Date()
+            var h = myDate.getHours()
+            var m = myDate.getMinutes()
+            var s = myDate.getSeconds()
+            var sdeg = Math.PI / 30 * s - Math.PI / 2
+            var mdeg = Math.PI / 30 * m - Math.PI / 2 + (s / 60) * (Math.PI / 30)
+            var hdeg = Math.PI / 6 * h - Math.PI / 2 + (m / 60) * (Math.PI / 6)
+
+            ctx.save()
+            ctx.lineWidth = 4
+            var hx = Math.cos(hdeg)
+            var hy = Math.sin(hdeg)
+            ctx.strokeStyle = "#000000"
+            ctx.beginPath()
+            ctx.moveTo(-10 * hx, -10 * hy)
+            ctx.lineTo(40 * hx, 40 * hy)
+            ctx.closePath()
+            ctx.stroke()
+            ctx.restore()
+
+            ctx.save()
+            ctx.lineWidth = 3
+            var mx = Math.cos(mdeg)
+            var my = Math.sin(mdeg)
+            ctx.strokeStyle = "#000000"
+            ctx.beginPath()
+            ctx.moveTo(-15 * mx, -15 * my)
+            ctx.lineTo(60 * mx, 60 * my)
+            ctx.closePath()
+            ctx.stroke()
+            ctx.restore()
+
+            ctx.save()
+            ctx.lineWidth = 1
+            var sx = Math.cos(sdeg)
+            var sy = Math.sin(sdeg)
+            ctx.strokeStyle = "lightcoral"
+            ctx.beginPath()
+            ctx.moveTo(-15 * sx, -15 * sy)
+            ctx.lineTo(60 * sx, 60 * sy)
+            ctx.closePath()
+            ctx.stroke()
+            ctx.restore()
+        }
+        clock()
+        setInterval(clock, 1000)
+    </script>
+</body>
+
+</html>
