@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM Event</title>
+</head>
+
+<body>
+    <div id="award">点击“开始“按钮，开始抽奖！</div>
+    <div class="action">
+        <button id="start">开 始</button>
+        <button id="stop">停 止</button>
+    </div>
+    <script>
+        var userdata = {award:0}
+        function change(obj){
+            var randomNum = Math.floor((Math.random()*100)+1)
+            obj.award = randomNum
+        }
+        function start(){
+            setInterval(change(userdata),10)
+        }
+        function stop(){
+            clearInterval()
+            if (userdata.award == 1){alert("恭喜您获得了特等奖！")}
+            if (userdata.award>1 && 20>=userdata.award){alert("您获得了鼓励奖！再接再厉！")}
+            if (userdata.award>20 && 30>=userdata.award){alert("恭喜您获得了一等奖！")}
+            if (userdata.award>30 && 60>=userdata.award){alert("恭喜您获得了二等奖！")}
+            if (userdata.award>60){alert("恭喜你获得了三等奖！")}
+        }
+        document.getElementById("start").onclick = start
+        document.getElementById("stop").onclick = stop
+    </script>
+</body>
+
+</html>
