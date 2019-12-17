@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shopping Cart</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .shop {
+            width: 60%;
+            background-color: lightblue;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-wrap: wrap;
+            padding-top: 30px;
+        }
+
+        .cart {
+            width: 30%;
+            height: 1000px;
+            background-color: lightcoral;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+        }
+
+        .item {
+            width: 300px;
+            height: 300px;
+            background-color: lightgoldenrodyellow;
+            margin: 30px 0;
+        }
+
+        .cartitm {
+            width: 60%;
+            background-color: lightgreen;
+            height: 70px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="shop">
+            <div class="item" id="item1">商品1
+                <button onclick="add(1)">添加</button>
+            </div>
+            <div class="item" id="item2">商品2
+                <button onclick="add(2)">添加</button>
+            </div>
+            <div class="item" id="item3">商品3
+                <button onclick="add(3)">添加</button>
+            </div>
+            <div class="item" id="item4">商品4
+                <button onclick="add(4)">添加</button>
+            </div>
+            <div class="item" id="item5">商品5
+                <button onclick="add(5)">添加</button>
+            </div>
+            <div class="item" id="item6">商品6
+                <button onclick="add(6)">添加</button>
+            </div>
+            <div class="item" id="item7">商品7
+                <button onclick="add(7)">添加</button>
+            </div>
+            <div class="item" id="item8">商品8
+                <button onclick="add(8)">添加</button>
+            </div>
+            <div class="item" id="item9">商品9
+                <button onclick="add(9)">添加</button>
+            </div>
+        </div>
+        <div class="cart" id="cart">
+            <h2>购物车</h2>
+        </div>
+        <script>
+            var cart_storage = window.localStorage
+            // var item1num = cart_storage.item1
+            // var item2num = cart_storage.item2
+            // var item3num = cart_storage.item3
+            // var item4num = cart_storage.item4
+            // var item5num = cart_storage.item5
+            // var item6num = cart_storage.item6
+            // var item7num = cart_storage.item7
+            // var item8num = cart_storage.item8
+            // var item9num = cart_storage.item9
+            // var load = [item1num, item2num, item3num, item4num, item5num, item6num, item7num, item8num, item9num]
+            function add(a) {
+                if (document.querySelector(".cart #item" + a) == null) {
+                    var cart = document.getElementById("cart")
+                    var newdiv = document.createElement("div")
+                    newdiv.setAttribute("class", "cartitm")
+                    newdiv.setAttribute("id", "item" + a)
+                    newdiv.setAttribute("itemsum", "1")
+                    cart.appendChild(newdiv)
+                    var newcontent = document.createTextNode("商品" + a)
+                    var newbr = document.createElement("br")
+                    var newspan = document.createElement("span")
+                    var newnum = document.createTextNode("数量：" + newdiv.getAttribute("itemsum"))
+                    newspan.appendChild(newnum)
+                    var newbtn = document.createElement("button")
+                    var btncontent = document.createTextNode("删除")
+                    newbtn.setAttribute("onclick", "deletei(" + a + ")")
+                    newdiv.appendChild(newcontent)
+                    newdiv.appendChild(newbr)
+                    newdiv.appendChild(newspan)
+                    newdiv.appendChild(newbtn)
+                    newbtn.appendChild(btncontent)
+                    cart_storage["item" + a] = 1
+                }
+                else {
+                    var item = document.querySelector(".cart #item" + a)
+                    var itemsum = item.getAttribute("itemsum")
+                    itemsumN = Number(itemsum)
+                    itemsumN += 1
+                    item.setAttribute("itemsum", itemsumN)
+                    var newnum = document.createElement("span")
+                    var newsum = document.createTextNode("数量：" + itemsumN)
+                    newnum.appendChild(newsum)
+                    var oldnum = document.querySelector("#item" + a + " span")
+                    item.replaceChild(newnum, oldnum)
+                    var itemstorage = cart_storage["item" + a]
+                    itemstorageN = Number(itemstorage)
+                    itemstorageN += 1
+                    cart_storage["item" + a] = itemstorageN
+                }
+            }
+            function deletei(a) {
+                var cart = document.getElementById("cart")
+                var carti = document.querySelector(".cart #item" + a)
+                var itemsum = carti.getAttribute("itemsum")
+                itemsumN = Number(itemsum)
+                if (itemsumN == 1) {
+                    cart.removeChild(carti)
+                    var itemstorage = cart_storage["item" + a]
+                    itemstorageN = Number(itemstorage)
+                    itemstorageN = itemstorageN - 1
+                    cart_storage["item" + a] = itemstorageN
+                }
+                else {
+                    itemsumN = itemsumN - 1
+                    carti.setAttribute("itemsum", itemsumN)
+                    var newnum = document.createElement("span")
+                    var newsum = document.createTextNode("数量：" + itemsumN)
+                    newnum.appendChild(newsum)
+                    var oldnum = document.querySelector("#item" + a + " span")
+                    carti.replaceChild(newnum, oldnum)
+                    var itemstorage = cart_storage["item" + a]
+                    itemstorageN = Number(itemstorage)
+                    itemstorageN = itemstorageN - 1
+                    cart_storage["item" + a] = itemstorageN
+                }
+            }
+            function init() {
+                // for (num in load) {
+                //     if (Number(load[num]) == 0) {
+                //         continue
+                //     }
+                //     else {
+                //         for (a = 0; a < Number(load[num]); a++) {
+                //             inititem(Number(num) + 1)
+                //         }
+                //     }
+                // }
+                for (a = 1; a < 10; a++) {
+                    if (Number.isNaN(Number(cart_storage["item" + a])) == true) {
+                        continue
+                    }
+                    if (Number(cart_storage["item" + a]) == 0) {
+                        continue
+                    }
+                    if (document.querySelector(".cart #item" + a) == null) {
+                        var cart = document.getElementById("cart")
+                        var newdiv = document.createElement("div")
+                        var itemnumber = cart_storage["item" + a]
+                        newdiv.setAttribute("class", "cartitm")
+                        newdiv.setAttribute("id", "item" + a)
+                        newdiv.setAttribute("itemsum", Number(itemnumber))
+                        cart.appendChild(newdiv)
+                        var newcontent = document.createTextNode("商品" + a)
+                        var newbr = document.createElement("br")
+                        var newspan = document.createElement("span")
+                        var newnum = document.createTextNode("数量：" + newdiv.getAttribute("itemsum"))
+                        newspan.appendChild(newnum)
+                        var newbtn = document.createElement("button")
+                        var btncontent = document.createTextNode("删除")
+                        newbtn.setAttribute("onclick", "deletei(" + a + ")")
+                        newdiv.appendChild(newcontent)
+                        newdiv.appendChild(newbr)
+                        newdiv.appendChild(newspan)
+                        newdiv.appendChild(newbtn)
+                        newbtn.appendChild(btncontent)
+                    }
+                    else {
+                        continue
+                    }
+                }
+            }
+            // function inititem(a) {
+            //     var cart = document.getElementById("cart")
+            //     var newdiv = document.createElement("div")
+            //     var itemnum = Number(load[a - 1])
+            //     newdiv.setAttribute("class", "cartitm")
+            //     newdiv.setAttribute("id", "item" + a)
+            //     newdiv.setAttribute("itemsum", itemnum)
+            //     cart.appendChild(newdiv)
+            //     var newcontent = document.createTextNode("商品" + a)
+            //     var newbr = document.createElement("br")
+            //     var newspan = document.createElement("span")
+            //     var newnum = document.createTextNode("数量：" + newdiv.getAttribute("itemsum"))
+            //     newspan.appendChild(newnum)
+            //     var newbtn = document.createElement("button")
+            //     var btncontent = document.createTextNode("删除")
+            //     newbtn.setAttribute("onclick", "deletei(" + a + ")")
+            //     newdiv.appendChild(newcontent)
+            //     newdiv.appendChild(newbr)
+            //     newdiv.appendChild(newspan)
+            //     newdiv.appendChild(newbtn)
+            //     newbtn.appendChild(btncontent)
+            // }
+            init()
+        </script>
+    </div>
+</body>
+
+</html>
