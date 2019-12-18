@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript Pages</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .banner {
+            height: 270px;
+            background-image: url(https://work.mafengshe.com/static/imgs/banner.jpg);
+        }
+
+        .list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+        }
+
+        .item {
+            width: 22%;
+            height: 150px;
+            border-radius: 10px;
+            background-color: #4cd8e0;
+            position: relative;
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .num {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background-color: #20b6d2;
+            text-align: center;
+            line-height: 70px;
+            font-size: 24px;
+        }
+
+        .title {
+            height: 45px;
+            background-color: #00474c;
+            color: white;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            line-height: 45px;
+            text-align: center;
+        }
+
+        .pager {
+            text-align: center;
+        }
+
+        .pager a {
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner"></div>
+    <div class="list" id="list">
+        <div class="item">
+            <div class="num">1</div>
+            <div class="title">标题1</div>
+        </div>
+    </div>
+    <div class="pager" id="pager">
+        <!-- <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a> -->
+    </div>
+
+    <script>
+        var iList = document.getElementById("list")
+        function creatItem(num, title) {
+            var dom = document.createElement("div")
+            dom.setAttribute("class", "item")
+
+            var html = '<div class="num">' + num + '</div>' +
+                '<div class="title">' + title + '</div>'
+            dom.innerHTML = html
+
+            return dom
+        }
+
+        var data = []
+
+        for (var i = 1; i < 100; i++) {
+            data.push({ num: i, title: '标题' + i })
+        }
+
+        function getData(page) {
+            return data.slice(page * 12, page * 12 + 12)
+        }
+
+        function fillDom(page) {
+            while (iList.hasChildNodes()) {
+                iList.removeChild(iList.lastChild)
+            }
+            var data = getData(page)
+            var doms = data.map(function (i) {
+                return creatItem(i.num, i.title)
+            })
+            doms.forEach(function (i) {
+                iList.appendChild(i)
+            })
+        }
+
+        fillDom(0)
+
+        function createPage(page) {
+            var html = Number(page) + 1
+            var dom = document.createElement("a")
+            dom.setAttribute("href", "#")
+            dom.innerHTML = html
+
+            return dom
+        }
+
+        var pager = document.getElementById("pager")
+
+        function fillPager() {
+            while (pager.hasChildNodes()) {
+                pager.removeChild(pager.lastChild)
+            }
+            var pageData = []
+            for (i = 0; i < parseInt(100 / 12); i++) {
+                pageData.push(i)
+            }
+            // var doms = pageData.map(function (i) {
+            //     return createPage(Number(i).page)
+            // })
+            // doms.forEach(function (i) {
+            //     pager.appendChild(i)
+            // })
+            var doms = []
+            for(i in pageData){
+                doms.push(createPage(i))
+            }
+            doms.forEach(function (i) {
+                pager.appendChild(i)
+            })
+        }
+
+        fillPager()
+
+        var pages = document.querySelectorAll(".pager a")
+
+        for (let i = 0; i < pages.length; i++) {
+            pages[i].addEventListener("click", function () {
+                fillDom(i)
+            })
+        }
+        
+    </script>
+</body>
+
+</html>
