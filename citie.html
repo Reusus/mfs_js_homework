@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Citie</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .top {
+            height: 40px;
+        }
+
+        .nav {
+            width: 1100px;
+            height: 30px;
+            margin: 0 auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: lightcoral;
+        }
+
+        .content {
+            background-color: #ccc;
+            height: 2000px;
+            margin: 0 auto;
+            width: 1000px;
+        }
+
+        .fixed {
+            position: fixed
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top"></div>
+    <div class="nav"></div>
+    <div class="content"></div>
+    <script>
+        window.onscroll = function () {
+            if (window.scrollY > 40) {
+                $(".nav").addClass("fixed")
+            }
+            else {
+                $(".nav").removeClass("fixed")
+            }
+        }
+    </script>
+</body>
+
+</html>
