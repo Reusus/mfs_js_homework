@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+</head>
+
+<body>
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
+    <p>
+      用户名:
+      <input id="username" type="text" name="username">
+    </p>
+    <p><button id="button">提交</button></p>
+  <script>
+    $("#button").click(function(){
+      var username = $("#username").val()
+      $.ajax({
+      method: "POST",
+      url: "http://www.b.com:3000/submit",
+      data:{username: username},
+      success: function(data){
+        console.log(data)
+      }
+    })})
+  </script>
+</body>
+
+</html>
