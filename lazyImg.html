@@ -36,12 +36,15 @@
             var nodeH = $node.height();
             return nodeOT <= scrollTop + windowH && nodeOT + nodeH >= scrollTop
         }
-        window.onscroll = function () {
-            console.log(isShow($('img')))
-            if (isShow($('img'))) {
-                $('img').attr("src",$('img').data('src'))
+        function lazyImg($node) {
+            window.onscroll = function () {
+                console.log(isShow($($node)))
+                if (isShow($($node))) {
+                    $($node).attr("src", $($node).data('src'))
+                }
             }
         }
+        new lazyImg($("img"))
     </script>
 </body>
 
