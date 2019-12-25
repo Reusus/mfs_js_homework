@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+</head>
+
+<body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <span>省（直辖市）：<select name="province" id="province" onchange="selectProvince()"><option value="请选择" label="请选择" id="selectP"></option></select></span><span>市：<select name="state"
+            id="state" onchange="selectState()"><option value="请选择" label="请选择" id="selectS"></option></select></span><span>区（县）：<select name="city" id="city"><option value="请选择" label="请选择" id="selectC"></option></select></span>
+    <script>
+        var province = document.getElementById('province')
+        var state = document.getElementById('state')
+        var city = document.getElementById('city')
+        function setValue(option, value) {
+            option.setAttribute('value', value)
+        }
+        function setLabel(option, label) {
+            option.setAttribute('label', label)
+        }
+        var selectS = document.createElement("option")
+        setValue(selectS,'请选择')
+        setLabel(selectS,'请选择')
+        selectS.setAttribute('id', 'selectS')
+        
+        // function renderProvince() {
+        //     for (i = 0; i < regionData.length; i++) {
+        //         var newOption = document.createElement('option')
+        //         setValue(newOption, regionData[i].region.name)
+        //         setLabel(newOption, regionData[i].region.name)
+        //         province.appendChild(newOption)
+        //     }
+        // }
+        // function renderState(region) {
+        //     for (j = 0; j < regionData[region].region.state.length; j++) {
+        //         var newOption = document.createElement('option')
+        //         setValue(newOption, regionData[region].region.state[j].name)
+        //         setLabel(newOption, regionData[region].region.state[j].name)
+        //         state.appendChild(newOption)
+        //     }
+        // }
+        // function renderCity(region, state) {
+        //     for (k = 0; k < regionData[region].region.state[state].city.length; k++) {
+        //         var newOption = document.createElement('option')
+        //         setValue(newOption, regionData[region].region.state[state].city[k].name)
+        //         setLabel(newOption, regionData[region].region.state[state].city[k].name)
+        //         city.appendChild(newOption)
+        //     }
+        // }
+        function renderProvince() {
+            for (i = 0; i < myData.length; i++) {
+                var newOption = document.createElement('option')
+                setValue(newOption, myData.name[i])
+                setLabel(newOption, myData.name[i])
+                province.appendChild(newOption)
+            }
+        }
+        function renderState(region) {
+            for (j = 0; j < myData.length; j++) {
+                var newOption = document.createElement('option')
+                setValue(newOption, regionData[region].region.state[j].name)
+                setLabel(newOption, regionData[region].region.state[j].name)
+                state.appendChild(newOption)
+            }
+        }
+        function renderCity(region, state) {
+            for (k = 0; k < regionData[region].region.state[state].city.length; k++) {
+                var newOption = document.createElement('option')
+                setValue(newOption, regionData[region].region.state[state].city[k].name)
+                setLabel(newOption, regionData[region].region.state[state].city[k].name)
+                city.appendChild(newOption)
+            }
+        }
+
+
+        $.ajax({
+            method: "POST",
+            url: "http://localhost:3000/province_data",
+            data: { region: -1 },
+            success: function (data) {
+                var myData = JSON.parse(data)
+                for (i = 0; i < myData.length; i++) {
+                    var newOption = document.createElement('option')
+                    setValue(newOption, myData[i])
+                    setLabel(newOption, myData[i])
+                    province.appendChild(newOption)
+                }
+
+            }
+        })
+        function selectProvince(){
+            var state = document.getElementById('state')
+            while(document.querySelector("#selectP")){
+                province.removeChild(province.firstChild)
+            }
+            while (state.childNodes.length>1) {
+                state.removeChild(state.lastChild)
+            }
+            while (city.childNodes.length>1) {
+                city.removeChild(city.lastChild)
+            }
+            state.replaceChild(selectS, state.firstChild)
+            var index = $("#province").get(0).selectedIndex
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/province_data",
+                data: { region: index },
+                success: function (data) {
+                    var myData = JSON.parse(data)
+                    for (i = 0; i < myData.length; i++) {
+                        var newOption = document.createElement('option')
+                        setValue(newOption, myData[i])
+                        setLabel(newOption, myData[i])
+                        state.appendChild(newOption)
+                    }
+                    // console.log(myData)
+                }
+            })
+        }
+        function selectState(){
+            while (city.childNodes.length>1) {
+                city.removeChild(city.lastChild)
+            }
+            while(document.querySelector("#selectS")){
+                var state = document.getElementById('state')
+                state.removeChild(state.firstChild)
+            }
+            var index = $("#province").get(0).selectedIndex
+            var state = $("#state").get(0).selectedIndex
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/province_data",
+                data: { region: index , state: state},
+                success: function (data) {
+                    var myData = JSON.parse(data)
+                    for (i = 0; i < myData.length; i++) {
+                        var newOption = document.createElement('option')
+                        setValue(newOption, myData[i])
+                        setLabel(newOption, myData[i])
+                        city.appendChild(newOption)
+                    }
+                    // console.log(myData)
+                }
+            })
+        }
+        // $("#province").select(function () {
+        //     var stateOptions = document.getElementById("state")
+        //     this.document.setAttribute("selected")
+        //     while (stateOptions.hasChildNodes()) {
+        //         stateOptions.removeChild(stateOptions.lastChild)
+        //     }
+        //     var selectedRegion = document.querySelector("#province selected")
+        //     var index = selectedRegion.index(this)
+        //     $.ajax({
+        //         method: "POST",
+        //         url: "http://localhost:3000/province_data",
+        //         data: { region: index },
+        //         success: function (data) {
+        //             var myData = JSON.parse(data)
+        //             for (i = 0; i < myData.length; i++) {
+        //                 var newOption = document.createElement('option')
+        //                 setValue(newOption, myData[i])
+        //                 setLabel(newOption, myData[i])
+        //                 state.appendChild(newOption)
+        //             }
+        //             // console.log(myData)
+        //         }
+        //     })
+        // })
+    </script>
+</body>
+
+</html>
