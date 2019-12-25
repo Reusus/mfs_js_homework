@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <style>
+        .valid {
+            display: none;
+        }
+
+        .valid.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <form action="">
+
+        用户名:
+        <input id="username" type="text" name="username" oninput="usernameChange()" required
+            pattern="^[A-Za-z]\w{5,17}$">
+
+        <p class="valid">用户名已存在</p><br>
+
+        密码：
+        <input id="password" type="password" name="password" oninput="passwordInput()" required pattern="^.{6,18}">
+        <br>
+
+        重复密码：
+        <input id="pwd_rpt" type="password" name="pwd_rpt" oninput="passwordRepeatInput()" required pattern="^.{6,18}">
+
+        <input type="submit">
+        <!-- <p><button id="button">提交</button></p> -->
+    </form>
+    <br><br>
+    <script>
+        function usernameChange() {
+            var input = document.getElementById('username')
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/user_validate_submit",
+                data: { username: input.value },
+                success: function (data) {
+                    if (data.exist) {
+                        $('.valid').addClass('show')
+                    }
+                    else {
+                        $('.valid').removeClass('show')
+                    }
+                }
+            })
+        }
+        var password;
+        function passwordInput() {
+            password = document.getElementById("password").value
+        }
+        function passwordRepeatInput() {
+            var input = document.getElementById("pwd_rpt")
+            if (password != input.value) {
+                input.setCustomValidity("Password values do not match.")
+            } else {
+                input.setCustomValidity("")
+            }
+        }
+    </script>
+</body>
+
+</html>
