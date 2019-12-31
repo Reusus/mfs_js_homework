@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Class</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <style>
+        .isActive{
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <img :src="srcnow">
+        <form onsubmit="return false">
+            用户名：<input type="username" id="username">
+            <button @click='ajaxPost()'>提交</button>
+        </form>
+        <div>
+            输入字符串：<input type="text" id="upper" v-model="inputStr">
+            <span>{{inputStr | uppercase}}</span>
+        </div>
+        <div>
+            输入firstName：<input type="text" v-model="firstName"><br>
+            输入lastName：<input type="text" v-model="lastName"><br>
+            fullName: {{fullName}}
+        </div>
+        <div :class="clazz" @click='changeActive()'>active时有背景色,点击可以改变avtive状态</div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                srcnow: "https://www.mafengshe.com/f5a7cdb28fa5ca8cf1a828bf5c55c813.png",
+                sources: ["https://www.mafengshe.com/f5a7cdb28fa5ca8cf1a828bf5c55c813.png",
+                    "https://www.mafengshe.com/22fe06bc47d2dee2c83394f97e3867c1.png",
+                    "https://www.mafengshe.com/9b9475f17d2b12e000883e914476e27c.png"],
+                inputStr: '',
+                firstName: '',
+                lastName: '',
+                clazz: {
+                    isActive: true
+                }
+            },
+            computed: {
+                fullName: function(){
+                    return (this.firstName + ' ' + this.lastName)
+                }
+            },
+            created: function () {
+                var i = 0
+                setInterval(() => {
+                    i++
+                    if (i > 2) i = 0
+                    this.srcnow = this.sources[i]
+                }, 1000);
+            },
+            methods: {
+                ajaxPost: function() {
+                    var username = document.getElementById('username')
+                    $.ajax({
+                        method: "POST",
+                        url: "http://learning-api.mafengshe.com/news",
+                        data: { username: username.value },
+                        success:function(){
+                            console.log('successed')
+                        }
+                    })
+                },
+                changeActive: function(){
+                    (this.clazz.isActive == false)?(this.clazz.isActive = true):(this.clazz.isActive = false)
+                }
+            },
+            filters: {
+                uppercase: function(str){
+                    return str.toLocaleUpperCase()
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
