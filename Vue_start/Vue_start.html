@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{message}}
+    </div>
+    <div id="app-2">
+        {{num}}
+        <button v-on:click="clickAdd">点击加1</button>
+    </div>
+    <div id="app-3">
+        <ul>
+            <item v-for="i in items" :item="i"></item>
+        </ul>
+    </div>
+</body>
+<script>
+    //请声明组件item，并通过v-for命令实现创建多个item
+    //请实现在组件创建的打印created，在组件销毁的时候打印destroyed
+    Vue.component('item', {
+        props: ['item'],
+        template: '<li>{{item}}</li>',
+        created: function () {
+            console.log("created")
+        },
+        destroyed: function () {
+            console.log("destroyed")
+        }
+    })
+    var app3 = new Vue({
+        el: '#app-3',
+        data: {
+            items: [
+                "aaa",
+                "bbb",
+                "ccc"
+            ]
+        }
+    })
+    //请使用 Vue 在 data 内声明 str:"Hello Vue"，在视图中显示Hello Vue
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue'
+        }
+    })
+    //请实现计数器：视图上有一个div和一个button，如果点击botton则div中的数字加1
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            num: 0
+        },
+        methods: {
+            clickAdd: function () {
+                this.num += 1
+            }
+        }
+    })
+
+</script>
+
+</html>
