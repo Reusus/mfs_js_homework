@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <parent></parent>
+    </div>
+    <script>
+        //请实现如下效果，注意第一行的计数器在父组件中，两个Button为两个 Component
+        Vue.component("buttonitem", {
+            props: ["message"],
+            data() {
+                return {
+                    a: 0
+                }
+            },
+            template: `
+                <button @click="btnClick">{{a}}</button>
+            `,
+            methods: {
+                btnClick() {
+                    this.a++
+                    this.$emit("increase")
+                }
+            }
+        })
+        Vue.component("parent", {
+            data() {
+                return {
+                    totalA: 0
+                }
+            },
+            template: `
+                <div>
+                    <p>{{totalA}}</p>
+                    <buttonitem :message=this.a @increase="totalIncrease"></buttonitem>
+                    <buttonitem :message=this.a @increase="totalIncrease"></buttonitem>
+                </div>
+            `,
+            methods: {
+                totalIncrease() {
+                    this.totalA++
+                }
+            },
+        })
+        var app = new Vue({
+            el: "#app"
+        })
+        //请使用 slot 实现页头页脚固定，中间的 content 为调用组件时在组件内部声明的内容
+    </script>
+</body>
+
+</html>

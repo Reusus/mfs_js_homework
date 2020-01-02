@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <container>
+            <div>content</div>
+        </container>
+    </div>
+    <script>
+        Vue.component("container",{
+            template: `
+                <div>
+                    <header>header</header>
+                    <slot></slot>
+                    <footer>footer</footer>    
+                </div>
+            `
+        })
+        //请使用 slot 实现页头页脚固定，中间的 content 为调用组件时在组件内部声明的内容
+        var app = new Vue({
+            el: "#app"
+        })
+    </script>
+</body>
+
+</html>
