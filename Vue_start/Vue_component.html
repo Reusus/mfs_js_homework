@@ -16,7 +16,6 @@
     <script>
         //请实现如下效果，注意第一行的计数器在父组件中，两个Button为两个 Component
         Vue.component("buttonitem", {
-            props: ["message"],
             data() {
                 return {
                     a: 0
@@ -41,8 +40,8 @@
             template: `
                 <div>
                     <p>{{totalA}}</p>
-                    <buttonitem :message=this.a @increase="totalIncrease"></buttonitem>
-                    <buttonitem :message=this.a @increase="totalIncrease"></buttonitem>
+                    <buttonitem @increase="totalIncrease"></buttonitem>
+                    <buttonitem @increase="totalIncrease"></buttonitem>
                 </div>
             `,
             methods: {
