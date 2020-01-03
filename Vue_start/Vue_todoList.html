@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue TodoList</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        ul {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <input type="checkbox" v-model="stateAll">
+        <input type="text" v-model="newTodo" @keyup.enter="createNewTodo">
+        <ul>
+            <li v-for="(item, index) in filteredTodos" :class="item.state?'completed':''">
+                <input type="checkbox" v-model="item.state">
+                {{item.text}}
+                <button @click="deleteTodo(index)">X</button>
+            </li>
+        </ul>
+        <span>{{leftTodos}} items left</span>
+        <button @click="filter = 'All'">All</button>
+        <button @click="filter = 'Active'">Active</button>
+        <button @click="filter = 'Completed'">Complete</button>
+        <button @click="clearTodos" v-if="completedTodos">ClearDones</button>
+    </div>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                newTodo: "",
+                todos: [
+                    { text: "aaaa", state: false },
+                    { text: "bbbb", state: true }
+                ],
+                filter: "All",
+                stateAll: false
+            },
+            computed: {
+                filteredTodos: function () {
+                    if (this.filter == "All") return this.todos
+                    if (this.filter == "Active") {
+                        return this.todos.filter(i => !i.state)
+                    }
+                    if (this.filter == "Completed") {
+                        return this.todos.filter(i => i.state)
+                    }
+                },
+                leftTodos: function () {
+                    return this.todos.filter(i => !i.state).length
+                },
+                completedTodos: function () {
+                    return this.todos.filter(i => i.state).length
+                }
+            },
+            watch: {
+                stateAll: function (val) {
+                    this.todos.map(i => {
+                        i.state = val
+                        return i
+                    })
+                }
+            },
+            methods: {
+                createNewTodo() {
+                    if (this.newTodo.match(/^[ ]*$/)) return
+                    var newTodoObj = { text: this.newTodo, state: false }
+                    this.todos.push(newTodoObj)
+                    this.newTodo = ""
+                },
+                deleteTodo(index) {
+                    this.todos.splice(index, 1)
+                },
+                clearTodos() {
+                    this.todos = this.todos.filter(i => !i.state)
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
